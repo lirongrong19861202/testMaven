@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chillax.dao.IHouseNumDao" >  
+    <resultMap id="BaseResultMap" type="com.chillax.dto.HouseNum">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="num" property="num" jdbcType="VARCHAR" />
+		<result column="community_id" property="community_id" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, num,community_id
+	</sql>
+	
+	<!-- 查询该小区所有栋数-->
+	<select id="getHouseNum" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from house_num
+		where community_id =  #{communityId,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 查询该小区所有栋数-->
+	<select id="getHouseNumById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from house_num
+		where id =  #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据小区查询栋数-->
+	<select id="getHouseNumByCommunityAndNum" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from house_num
+		where community_id =  #{communityId,jdbcType=INTEGER}
+		and num = #{house_num,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="saveHouseNum" parameterType="com.chillax.dto.HouseNum" >
+    insert into house_num
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="houseNum.num != null and houseNum.num != ''" >
+        num,
+      </if>
+      <if test="houseNum.community_id != null and houseNum.community_id != ''" >
+        community_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="houseNum.num != null and houseNum.num != ''" >
+        #{houseNum.num,jdbcType=VARCHAR},
+      </if>
+      <if test="houseNum.community_id != null and houseNum.community_id != ''" >
+        #{houseNum.community_id,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

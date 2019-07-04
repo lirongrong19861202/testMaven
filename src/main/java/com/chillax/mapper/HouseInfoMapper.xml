@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chillax.dao.IHouseInfoDao" >  
+    <resultMap id="BaseResultMap" type="com.chillax.dto.HouseInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="community" property="community" jdbcType="INTEGER" />
+		<result column="house_num" property="house_num" jdbcType="INTEGER" />
+		<result column="building" property="building" jdbcType="INTEGER" />
+		<result column="floor_num" property="floor_num" jdbcType="VARCHAR" />
+		<result column="num" property="num" jdbcType="VARCHAR" />
+		<result column="house_area" property="house_area" jdbcType="NUMERIC" />
+		<result column="calculate_area" property="calculate_area" jdbcType="NUMERIC" />
+		<result column="apartment_type" property="apartment_type" jdbcType="INTEGER" />
+		<result column="structure" property="structure" jdbcType="VARCHAR" />
+		<result column="locate" property="locate" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		<result column="lease_nuture" property="lease_nuture" jdbcType="VARCHAR" />
+		<result column="community_status" property="community_status" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, community,house_num,building,floor_num,num,house_area,calculate_area,apartment_type,structure,locate,position,lease_nuture,community_status
+	</sql>
+	
+	<!-- 查询所有小区-->
+	<select id="getHouseBasicInfo" resultType="java.util.Map">
+		select
+			a.id,
+			a.community,
+			b.name as communityName,
+			b.locate as communityLocate,
+			a.house_num ,
+			a.building,
+			a.floor_num,
+			a.num,
+			a.house_area,
+			a.calculate_area,
+			a.apartment_type,
+			a.structure,
+			a.lease_nuture,
+			a.community_status,
+			a.locate,
+			a.num as no
+		from house_info a,community b 
+		where 
+		a.community = b.id 
+		<if test="community != null" >
+		and a.community = #{community,jdbcType=INTEGER} 
+		</if>
+		<if test="houseNum != null" >
+		and a.house_num = #{houseNum,jdbcType=INTEGER} 
+		</if>
+		<if test="building != null" >
+		and a.building = #{building,jdbcType=INTEGER} 
+		</if>
+		<if test="apartmentType != null" >
+        and a.apartment_type = #{apartmentType,jdbcType=INTEGER} 
+        </if>
+        <if test="communityStatus != null" >
+        and a.community_status =  #{communityStatus,jdbcType=INTEGER} 
+        </if>
+        <if test="locate != ''" >
+        and a.locate like CONCAT('%',#{locate,jdbcType=VARCHAR},'%')
+        </if>		
+	</select>
+	<!-- 查询房子是否已经登记-->
+	<select id="findBuild"  resultType="java.util.Map">
+		select  
+		<include refid="Base_Column_List"/>
+		from house_info a
+		where 
+		<if test="fyXqCode != 0 and fyXqCode != null">
+		 a.community = #{fyXqCode,jdbcType=INTEGER} 
+		</if> 
+		<if test="fyLh != 0 and fyLh != null">
+		and a.house_num = #{fyLh,jdbcType=INTEGER} 
+		</if> 
+		<if test="fyDh != 0 and fyDh != null">
+		and a.building = #{fyDh,jdbcType=INTEGER} 
+		</if> 
+		<if test="fyCh != 0 and fyCh != null">
+		and a.floor_num = #{fyCh,jdbcType=VARCHAR} 
+		</if> 
+		<if test="fyFh != 0 and fyFh != null">
+		and a.num = #{fyFh,jdbcType=VARCHAR} 
+		</if> 
+	</select>
+	<insert id="saveHouseInfo" parameterType="com.chillax.dto.HouseInfo" >
+    insert into house_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="houseInfo.community != null" >
+        community,
+      </if>
+      <if test="houseInfo.house_num != null" >
+        house_num,
+      </if>
+      <if test="houseInfo.building != null" >
+        building,
+      </if>
+      <if test="houseInfo.floor_num != null" >
+        floor_num,
+      </if>
+      <if test="houseInfo.num != null" >
+        num,
+      </if>
+      <if test="houseInfo.house_area != null" >
+        house_area,
+      </if>
+      <if test="houseInfo.calculate_area != null" >
+        calculate_area,
+      </if>
+      <if test="houseInfo.apartment_type != null" >
+        apartment_type,
+      </if>
+      <if test="houseInfo.structure != null" >
+        structure,
+      </if>
+      <if test="houseInfo.locate != null" >
+        locate,
+      </if>
+      <if test="houseInfo.position != null" >
+        position,
+      <if test="houseInfo.lease_nuture != null" >
+        lease_nuture,
+      </if>
+      <if test="houseInfo.community_status != null" >
+        community_status,
+      </if>
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="houseInfo.community != null" >
+        #{houseInfo.community,jdbcType=INTEGER},
+      </if>
+      <if test="houseInfo.house_num != null" >
+        #{houseInfo.house_num,jdbcType=INTEGER},
+      </if>
+      <if test="houseInfo.building != null" >
+        #{houseInfo.building,jdbcType=INTEGER},
+      </if>
+      <if test="houseInfo.floor_num != null" >
+        #{houseInfo.floor_num,jdbcType=VARCHAR},
+      </if>
+      <if test="houseInfo.num != null" >
+        #{houseInfo.num,jdbcType=VARCHAR},
+      </if>
+      <if test="houseInfo.house_area != null" >
+        #{houseInfo.house_area,jdbcType=NUMERIC},
+      </if>
+      <if test="houseInfo.calculate_area != null" >
+        #{houseInfo.calculate_area,jdbcType=NUMERIC},
+      </if>
+      <if test="houseInfo.apartment_type != null" >
+        #{houseInfo.apartment_type,jdbcType=INTEGER},
+      </if>
+      <if test="houseInfo.structure != null" >
+        #{houseInfo.structure,jdbcType=VARCHAR},
+      </if>
+      <if test="houseInfo.locate != null" >
+        #{houseInfo.locate,jdbcType=VARCHAR},
+      </if>
+      <if test="houseInfo.position != null" >
+        #{houseInfo.position,jdbcType=VARCHAR},
+      </if>
+      <if test="houseInfo.lease_nuture != null" >
+        #{houseInfo.lease_nuture,jdbcType=VARCHAR},
+      </if>
+      <if test="houseInfo.community_status != null" >
+        #{houseInfo.community_status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 删除-->
+	<select id="deleteHouseById"  resultType="java.util.Map">
+		delete
+		from house_info 
+		where 
+		 id = #{id,jdbcType=INTEGER}  
+	</select>
+</mapper>

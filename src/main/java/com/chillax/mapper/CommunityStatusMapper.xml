@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chillax.dao.ICommunityStatusDao" >  
+    <resultMap id="BaseResultMap" type="com.chillax.dto.CommunityStatus">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="type_name" property="type_name" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name
+	</sql>
+	
+	<!-- 查询所有小区状态-->
+	<select id="getCommunityStatusList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from dict_community_status
+	</select>
+	
+	<!-- 根据id查询所有小区状态-->
+	<select id="getStatusById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from dict_community_status
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据id查询所有小区状态-->
+	<select id="getStatusByName" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from dict_community_status
+		where name = #{name,jdbcType=VARCHAR}
+	</select>
+	
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chillax.dao.IApartmentTypeDao" >  
+    <resultMap id="BaseResultMap" type="com.chillax.dto.ApartmentType">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="type_name" property="type_name" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, type_name
+	</sql>
+	
+	<!-- 查询所有小区-->
+	<select id="getApartmentTypeList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from dict_apartment_type
+	</select>
+	
+	<!-- 根据id查询所有小区-->
+	<select id="getTypeById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from dict_apartment_type
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据name查询所有小区-->
+	<select id="getTypeByName" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from dict_apartment_type
+		where type_name = #{name,jdbcType=VARCHAR}
+	</select>
+</mapper>
